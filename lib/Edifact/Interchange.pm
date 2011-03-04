@@ -326,7 +326,7 @@ sub interchange_header {
     my ( $self, @hdr ) = @_;
     $self->{control_ref} = $hdr[4];
     my $charencoding = 'iso-8859-1';
-    my $syntax_id = substr $hdr[0], 9, 4;
+    my $syntax_id = substr $hdr[0], 0, 4;
     if ( exists $encoding_map{$syntax_id} ) {
         $charencoding = $encoding_map{$syntax_id};
     }
