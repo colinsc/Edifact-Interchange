@@ -5,6 +5,7 @@ README
 examples/SampleQuote.txt
 lib/Edifact/Interchange.pm
 lib/Edifact/Message.pm
+lib/Edifact/Message/LineItem.pm
 t/00-load.t
 t/boilerplate.t
 t/manifest.t

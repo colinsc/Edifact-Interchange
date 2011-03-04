@@ -4,10 +4,11 @@ use warnings;
 use strict;
 use 5.010;
 use Carp;
+use Edifact::Message::LineItem;
 
 =head1 NAME
 
-Edifact::Message - The great new Edifact::Message!
+Edifact::Message - Class that models Edifact Messages
 
 =head1 VERSION
 
@@ -81,7 +82,7 @@ sub add_segment {
                     $self->{expirty_date} = $date;
                 }
             } elsif ( $self->{segment_group} == 27 ) {
-                $self->{lines}->[-1]->{datetimeperiod} = $data_arr;
+                $self->{lines}->[-1]->addsegment( 'datetimeperiod', $data_arr );
             }
         }
         when ('RFF') {
@@ -100,7 +101,7 @@ sub add_segment {
 
             } elsif ( $self->{segment_group} == 27 )
             {                                      # ref to an address (SG12)
-                push @{ $self->{lines}->[-1]->{item_reference} }, $data_arr;
+                $self->{lines}->[-1]->addsegment( 'item_reference', $data_arr );
             } else {
                 push @{ $self->{reference} }, {
                     qualifier => $data_arr->[0]->[0],
@@ -134,40 +135,43 @@ sub add_segment {
             if ( $data_arr->[3]->[0] ) {
                 $line->{sub_line_info} = $data_arr->[3];
             }
-            push @{ $self->{lines} }, $line;
-            $self->{cur_line_number} = $line->{line_number};
+            my $lineitem = Edifact::Message::LineItem->new($line);
+
+            push @{ $self->{lines} }, $lineitem;
         }
         when ('PIA') {
-            push @{ $self->{lines}->[-1]->{additional_product_ids} }, $data_arr;
+            $self->{lines}->[-1]
+              ->addsegment( 'additional_product_ids', $data_arr );
         }
         when ('IMD') {
             if ( $data_arr->[0]->[0] eq 'L' ) { # only handle text at the moment
                 if ( $data_arr->[2]->[4] ) {
                     $data_arr->[2]->[3] .= $data_arr->[2]->[4];
                 }
-                push @{ $self->{lines}->[-1]->{item_description} }, {
-                    code   => $data_arr->[1]->[0],
-                      text => $data_arr->[2]->[3],
-                };
+                $self->{lines}->[-1]->addsegment(
+                    'item_description',
+                    {
+                        code   => $data_arr->[1]->[0],
+                          text => $data_arr->[2]->[3],
+                    }
+                );
             }
         }
         when ('QTY') {
             $self->{lines}->[-1]->{quantity} = $data_arr->[0]->[1];
         }
         when ('GIR') {
-            my $ln = $self->{cur_line_number} - 1;
             $self->{lines}->[-1]->{related_numbers} = $data_arr;
         }
         when ('MOA') {
             $self->{lines}->[-1]->{monetary_amount} = $data_arr;
         }
         when ('PRI') {
-            my $ln = $self->{cur_line_number} - 1;
             $self->{lines}->[-1]->{price} = {
-                qualifier            => $data_arr->[0]->[0],
-                price                => $data_arr->[0]->[1],
-                price_type           => $data_arr->[0]->[2],
-                price_type_qualifier => $data_arr->[0]->[3],
+                qualifier              => $data_arr->[0]->[0],
+                  price                => $data_arr->[0]->[1],
+                  price_type           => $data_arr->[0]->[2],
+                  price_type_qualifier => $data_arr->[0]->[3],
             };
         }
         when ('UNS') {
@@ -243,153 +247,15 @@ sub date_of_message {
     return $self->{message_date};
 }
 
-# from lineitems
+=head2 items
 
-=head2 order_reference_number
-
-=cut
-
-sub order_reference_number {
-    my $self = shift;
-    my $line = shift;
-
-}
-
-=head2 line_sequence_number
+return the list of lineitems
 
 =cut
 
-sub line_sequence_number {
+sub items {
     my $self = shift;
-    my $line = shift;
-}
-
-=head2 ean
-
-Return the lineitem's ean (a 13 digit ISBN)
-
-=cut
-
-sub ean {    #LIN
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 author_surname
-
-=cut
-
-sub author_surname {    #110
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 author_firstname
-
-=cut
-
-sub author_firstname {    # 111
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 author
-
-=cut
-
-sub author {
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 title
-
-=cut
-
-sub title {    #050
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 subtitle
-
-=cut
-
-sub subtitle {    #060
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 edition
-
-=cut
-
-sub edition {     # IMD 100
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 place_of_publication
-
-=cut
-
-sub place_of_publication {    # IMD 110
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 publisher
-
-=cut
-
-sub publisher {               # IMD 120
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 date_of_publication
-
-=cut
-
-sub date_of_publication {     # IMD 170
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 item_format
-
-=cut
-
-sub item_format {             #IMD 220
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 shelfmark
-
-=cut
-
-sub shelfmark {               #IMD 230
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 quantity
-
-=cut
-
-sub quantity {
-    my $self = shift;
-    my $line = shift;
-}
-
-=head2 price
-
-=cut
-
-sub price {
-    my $self = shift;
-    my $line = shift;
+    return $self->{lines};
 }
 
 =head1 AUTHOR
