@@ -4,6 +4,7 @@ use warnings;
 use strict;
 use 5.010;
 use Carp;
+use Encode;
 use Edifact::Message;
 
 =head1 NAME
@@ -17,6 +18,17 @@ Version 0.01
 =cut
 
 our $VERSION = '0.01';
+
+#  UNOA and UNOB "correspond to the basic ascii sets of iso 646 and iso 6937"
+# Version 4 of edifact should extend this to unicode
+our %encoding_map = (
+    'UNOA' => 'ascii',
+    'UNOB' => 'ascii',
+    'UNOC' => 'iso-8859-1',
+    'UNOD' => 'iso-8859-2',
+    'UNOE' => 'iso-8859-5',
+    'UNOF' => 'iso-8859-7',
+);
 
 =head1 SYNOPSIS
 
@@ -296,7 +308,8 @@ sub split_components {
         foreach (@components) {
             s/$self->{separator}->{release}([$self->{sep_class}])/$1/g;
 
-            # TODO -> utf8
+            # convert data to utf-8
+            $_ = $self->{enc}->decode($_);
         }
         push @{$d_arr}, \@components;
     }
@@ -311,9 +324,14 @@ Internal method to parse the interchange header
 
 sub interchange_header {
     my ( $self, @hdr ) = @_;
-    say 'interchange_header';
     $self->{control_ref} = $hdr[4];
-    say 'Ref:', $hdr[4];
+    my $charencoding = 'iso-8859-1';
+    my $syntax_id = substr $hdr[0], 9, 4;
+    if ( exists $encoding_map{$syntax_id} ) {
+        $charencoding = $encoding_map{$syntax_id};
+    }
+    $self->{enc} = find_encoding($charencoding);
+    croak qq(encoding "$charencoding" not found) unless ref $self->{enc};
     my $interchange_header = $self->split_components(@hdr);
 
     # syntax identifier :: Syntax_id a4 'UNO'[ABC]:Syntax_version
