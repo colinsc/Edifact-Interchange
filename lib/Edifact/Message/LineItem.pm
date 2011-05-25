@@ -253,6 +253,15 @@ sub price {
     my $self = shift;
 }
 
+sub related_numbers {
+    my $self = shift;
+    if ( $self->{related_numbers} ) {
+        return $self->{related_numbers};
+    } else {
+        return;
+    }
+}
+
 =head1 AUTHOR
 
 Colin Campbell, C<< <colin.campbell at ptfs-europe.com> >>

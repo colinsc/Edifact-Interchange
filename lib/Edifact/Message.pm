@@ -29,6 +29,7 @@ of them is returned in its messages function
       ...retrieve message data
    }
 
+=cut
 
 =head1 SUBROUTINES/METHODS
 
@@ -161,7 +162,13 @@ sub add_segment {
             $self->{lines}->[-1]->{quantity} = $data_arr->[0]->[1];
         }
         when ('GIR') {
-            $self->{lines}->[-1]->{related_numbers} = $data_arr;
+            my $id = shift @{$data_arr};
+            my $relnum = { id => $id->[0], };
+            for my $d ( @{$data_arr} ) {
+                push @{ $relnum->{ $d->[1] } }, $d->[0];
+            }
+
+            push @{ $self->{lines}->[-1]->{related_numbers} }, $relnum;
         }
         when ('MOA') {
             $self->{lines}->[-1]->{monetary_amount} = $data_arr;
