@@ -93,10 +93,10 @@ sub ean {    #LIN
 
 =cut
 
-sub author_surname {    #110
+sub author_surname {    #010
     my $self = shift;
     for my $d ( @{ $self->{item_description} } ) {
-        if ( $d->{code} eq '110' ) {
+        if ( $d->{code} eq '010' ) {
             return $d->{text};
         }
     }
@@ -107,10 +107,10 @@ sub author_surname {    #110
 
 =cut
 
-sub author_firstname {    # 111
+sub author_firstname {    # 011
     my $self = shift;
     for my $d ( @{ $self->{item_description} } ) {
-        if ( $d->{code} eq '111' ) {
+        if ( $d->{code} eq '011' ) {
             return $d->{text};
         }
     }
