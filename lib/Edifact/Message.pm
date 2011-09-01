@@ -189,6 +189,14 @@ sub add_segment {
                 $self->{summary_count} = $data_arr->[0]->[1];
             }
         }
+        when ('FTX') {
+            $self->{lines}->[-1]->{free_text} = {
+                qualifier   => $data_arr->[0]->[0],    # LIN/LNO
+                  reference => $data_arr->[2],
+                  text      => join q{ },
+                  @{ $data_arr->[3] },
+            };
+        }
     }
     return;
 }
@@ -283,29 +291,6 @@ automatically be notified of progress on your bug as I make changes.
 You can find documentation for this module with the perldoc command.
 
     perldoc Edifact::Message
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Edifact-Interchange>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Edifact-Interchange>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Edifact-Interchange>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Edifact-Interchange/>
-
-=back
 
 
 =head1 ACKNOWLEDGEMENTS
