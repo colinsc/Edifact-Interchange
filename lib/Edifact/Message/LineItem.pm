@@ -282,28 +282,6 @@ You can find documentation for this module with the perldoc command.
     perldoc Edifact::Message
 
 
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Edifact-Interchange>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Edifact-Interchange>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Edifact-Interchange>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Edifact-Interchange/>
-
-=back
-
 
 =head1 ACKNOWLEDGEMENTS
 
