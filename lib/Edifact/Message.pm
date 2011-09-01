@@ -189,6 +189,14 @@ sub add_segment {
                 $self->{summary_count} = $data_arr->[0]->[1];
             }
         }
+        when ('FTX') {
+            $self->{lines}->[-1]->{free_text} = {
+                qualifier   => $data_arr->[0]->[0],    # LIN/LNO
+                  reference => $data_arr->[2],
+                  text      => join q{ },
+                  @{ $data_arr->[3] },
+            };
+        }
     }
     return;
 }
