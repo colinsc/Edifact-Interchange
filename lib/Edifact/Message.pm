@@ -343,7 +343,7 @@ sub add_segment {
             };
             if ($data_arr->[3])
             {
-                $self->{lines}->[-1]->{free_text}->text = @{$data_arr->[3]};
+                $self->{lines}->[-1]->{free_text}->{text} = @{$data_arr->[3]};
             }
         }
     }
