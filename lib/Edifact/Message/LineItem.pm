@@ -53,7 +53,8 @@ sub addsegment {
 
     if ( !exists $self->{$datalabel} ) {
         $self->{$datalabel} = $data_arrref;
-    } else {
+    }
+    else {
         if ( ref $self->{$datalabel} eq 'ARRAY' ) {
             push @{ $self->{$datalabel} }, $data_arrref;
         }
@@ -253,11 +254,16 @@ sub price {
     my $self = shift;
 }
 
+=head2 related_numbers
+
+=cut
+
 sub related_numbers {
     my $self = shift;
     if ( $self->{related_numbers} ) {
         return $self->{related_numbers};
-    } else {
+    }
+    else {
         return;
     }
 }

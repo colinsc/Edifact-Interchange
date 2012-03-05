@@ -79,10 +79,12 @@ sub add_segment {
                     #TBD standard allows 35 repeats
                 if ( $qualifier == 137 ) {
                     $self->{message_date} = $date;
-                } elsif ( $qualifier == 36 ) {
+                }
+                elsif ( $qualifier == 36 ) {
                     $self->{expirty_date} = $date;
                 }
-            } elsif ( $self->{segment_group} == 27 ) {
+            }
+            elsif ( $self->{segment_group} == 27 ) {
                 $self->{lines}->[-1]->addsegment( 'datetimeperiod', $data_arr );
             }
         }
@@ -93,17 +95,18 @@ sub add_segment {
                     qualifier => $data_arr->[0]->[0],
                     number    => $data_arr->[0]->[1],
                 };
-            } elsif ( $self->{segment_group} == 11 )
-            {                                      # ref to an address (SG12)
+            }
+            elsif ( $self->{segment_group} == 11 ) {  # ref to an address (SG12)
                 $self->{addresses}->[-1]->{RFF} = {
                     qualifier => $data_arr->[0]->[0],
                       number  => $data_arr->[0]->[1],
                 };
 
-            } elsif ( $self->{segment_group} == 27 )
-            {                                      # ref to an address (SG12)
+            }
+            elsif ( $self->{segment_group} == 27 ) {  # ref to an address (SG12)
                 $self->{lines}->[-1]->addsegment( 'item_reference', $data_arr );
-            } else {
+            }
+            else {
                 push @{ $self->{reference} }, {
                     qualifier => $data_arr->[0]->[0],
                       number  => $data_arr->[0]->[1],
@@ -225,9 +228,11 @@ sub function {
     my $f    = $self->{bgm_data}->[2]->[0];
     if ( $f == 9 ) {
         return 'original';
-    } elsif ( $f == 7 ) {
+    }
+    elsif ( $f == 7 ) {
         return 'retransmission';
-    } else {
+    }
+    else {
         return $f;
     }
 }
@@ -309,4 +314,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-1;    # End of Edifact::Message
+1;

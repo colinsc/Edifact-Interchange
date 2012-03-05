@@ -21,7 +21,7 @@ our $VERSION = '0.01';
 
 #  UNOA and UNOB "correspond to the basic ascii sets of iso 646 and iso 6937"
 # Version 4 of edifact should extend this to unicode
-our %encoding_map = (
+my %encoding_map = (
     'UNOA' => 'ascii',
     'UNOB' => 'ascii',
     'UNOC' => 'iso-8859-1',
@@ -101,7 +101,8 @@ sub parse {
           $hdr;
         push @{ $self->{interchange} },
           $self->interchange_header( @hdr_fields[ 1 .. $#hdr_fields ] );
-    } else {
+    }
+    else {
         croak 'Interchange does not begin with an Interchange header';
     }
     my $current_msg;
@@ -109,22 +110,28 @@ sub parse {
         my ( $tag, @data ) =
           split /(?<!$self->{separator}->{release})$self->{separator}->{data}/,
           $segment;
-        if ( $tag eq 'UNH' ) {
-            $current_msg = $self->message_header(@data);
-            next;
-        } elsif ( $tag eq 'UNT' ) {
-            $self->message_trailer( $current_msg, @data );
-            $current_msg = undef;
-            next;
-        } elsif ( $tag eq 'UNZ' ) {
-            $self->interchange_trailer(@data);
-            next;
-        } elsif ( $tag eq 'UNG' ) {
-            $self->message_group_header(@data);
-            next;
-        } elsif ( $tag eq 'UNE' ) {
-            $self->message_group_trailer(@data);
-            next;
+        given ($tag) {
+            when (/UNH/) {
+                $current_msg = $self->message_header(@data);
+                next;
+            }
+            when (/UNT/) {
+                $self->message_trailer( $current_msg, @data );
+                $current_msg = undef;
+                next;
+            }
+            when (/^UNZ/) {
+                $self->interchange_trailer(@data);
+                next;
+            }
+            when (/^UNG/) {
+                $self->message_group_header(@data);
+                next;
+            }
+            when (/^UNE/) {
+                $self->message_group_trailer(@data);
+                next;
+            }
         }
 
         $self->user_data_segment( $current_msg, $tag, @data );
@@ -155,7 +162,8 @@ sub parse_file {
     my $msg;
     if ( @lines == 1 ) {
         $msg = $lines[0];
-    } elsif ( @lines > 1 ) {
+    }
+    elsif ( @lines > 1 ) {
         $msg = join q{}, @lines;
     }
     if ($msg) {
@@ -271,12 +279,13 @@ sub read_service_string_advice {
 
         #say 'Standard Service String Advice';
         return;
-    } else {
+    }
+    else {
 
         #say 'Non standard Service String Advice';
         my @char = unpack 'C6', $ssa;
         foreach (@char) {
-            $_ = quotemeta($_);
+            $_ = quotemeta $_;
         }
         $self->{separator} = {
             component => $char[0],
@@ -420,7 +429,7 @@ You can find documentation for this module with the perldoc command.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2011 Colin Campbell.
+Copyright 2011,2012 Colin Campbell. <colin.campbell@ptfs-europe.com>
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
