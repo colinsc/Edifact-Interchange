@@ -9,7 +9,7 @@ use Edifact::Message;
 
 =head1 NAME
 
-Edifact::Interchange - The great new Edifact::Interchange!
+Edifact::Interchange - Parse Edifact Messages For Book Ordering
 
 =head1 VERSION
 
@@ -32,9 +32,8 @@ my %encoding_map = (
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
+This is a support module for EDI ordering modules being developed for the
+Koha and Evergreen OS Library Management Systems
 
     use Edifact::Interchange;
 
@@ -58,8 +57,6 @@ sub new {
     my $print_trace = shift;
 
     my $self = {};
-
-    #    $self->{print} = $print_trace;
 
     bless $self, $class;
     return $self;
@@ -201,8 +198,6 @@ sub message_header {
 
     my $msg = Edifact::Message->new( $self->split_components(@data) );
 
-    #say 'message_header';
-
     return $msg;
 }
 
@@ -215,10 +210,6 @@ End message add completed message to my messages array
 sub message_trailer {
     my ( $self, $msg, @data ) = @_;
 
-    #say 'Message Trailer';
-
-    #say "   Count=$data[0]";
-    #say "   Ref=$data[1]";
     $self->{msg_cnt}++;
     push @{ $self->{messages} }, $msg;
     return;
@@ -234,9 +225,6 @@ interchange trailer
 sub interchange_trailer {
     my ( $self, @data ) = @_;
 
-    #say 'Interchange Trailer';
-
-    #say "$data[0] messages";
     if ( $data[0] != $self->{msg_cnt} ) {
         carp "Message count error trailer says $data[0] I counted "
           . $self->{msg_cnt};
@@ -244,15 +232,12 @@ sub interchange_trailer {
     say "Ref:$data[1]";
     if ( $data[1] ne $self->{control_ref} ) {
 
-        #    say "Trailer: $data[1]";
-        #say "Header : ", $self->{control_ref};
         carp 'Error mismatched control refs Header:'
           . $self->{control_ref}
           . ' Trailer:'
           . $data[1];
     }
 
-    #    $self->{messages} = $data[0];
     return;
 }
 
@@ -277,12 +262,12 @@ sub read_service_string_advice {
     # Segment terminator               '
     if ( $ssa eq q{:+.? '} ) {
 
-        #say 'Standard Service String Advice';
+        # 'Standard Service String Advice';
         return;
     }
     else {
 
-        #say 'Non standard Service String Advice';
+        #'Non standard Service String Advice';
         my @char = unpack 'C6', $ssa;
         foreach (@char) {
             $_ = quotemeta $_;
@@ -368,7 +353,7 @@ sub message_group_header {
     my ( $self, @data ) = @_;
 
     #TBD parse data
-    say 'message_group_header';
+    #say 'message_group_header';
 
     return;
 }
@@ -404,9 +389,16 @@ sub messages {
     return;
 }
 
+=head1 WARNINGS
+
+At present this is tested for quotes. Beware suppliers' interpretation of the
+Edifact Standard can vary considerably. (And the standard is large enough to
+allow considerable leeway on this). Its intended to expand this module based on
+practical experience.
+
 =head1 AUTHOR
 
-Colin Campbell, C<< <colin.campbell at ptfs-europe.com> >>
+Colin Campbell, C<< <colinsc@cpan.org> >>
 
 =head1 BUGS
 

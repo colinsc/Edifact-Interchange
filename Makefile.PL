@@ -1,15 +1,13 @@
+use 5.10.0;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME                => 'Edifact::Interchange',
-    AUTHOR              => q{Colin Campbell <colin.campbell@ptfs-europe.com>},
+    AUTHOR              => q{Colin Campbell <colinsc@cpan.org>},
     VERSION_FROM        => 'lib/Edifact/Interchange.pm',
     ABSTRACT_FROM       => 'lib/Edifact/Interchange.pm',
-    ($ExtUtils::MakeMaker::VERSION >= 6.3002
-      ? ('LICENSE'=> 'perl')
-      : ()),
     PL_FILES            => {},
     PREREQ_PM => {
         'Test::More' => 0,

@@ -270,7 +270,7 @@ sub related_numbers {
 
 =head1 AUTHOR
 
-Colin Campbell, C<< <colin.campbell at ptfs-europe.com> >>
+Colin Campbell, C<< <colinsc@cpan.org> >>
 
 =head1 BUGS
 
@@ -294,7 +294,7 @@ You can find documentation for this module with the perldoc command.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2011 Colin Campbell.
+Copyright 2011,2012 Colin Campbell.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published

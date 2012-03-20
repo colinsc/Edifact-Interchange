@@ -280,7 +280,7 @@ sub items {
 
 =head1 AUTHOR
 
-Colin Campbell, C<< <colin.campbell at ptfs-europe.com> >>
+Colin Campbell, C<< <colinsc@cpan.org> >>
 
 =head1 BUGS
 
