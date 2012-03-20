@@ -1,5 +1,7 @@
-Revision history for Edifact-Interchange
+Revision history for Business-Edifact-Interchange
 
 0.01    2011-03-04/11:00
         First version, parsing quotes messages
 
+0.02    2012-03-18/15:00
+        Placed under Business namespace
