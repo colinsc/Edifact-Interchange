@@ -3,13 +3,13 @@
 use Test::More tests => 5;
 
 BEGIN {
-    use_ok( 'Edifact::Interchange' ) || print "Bail out!  ";
-    use_ok( 'Edifact::Message' ) || print "Bail out!  ";
-    use_ok( 'Edifact::Message::LineItem' ) || print "Bail out!";
+    use_ok( 'Business::Edifact::Interchange' ) || print "Bail out!  ";
+    use_ok( 'Business::Edifact::Message' ) || print "Bail out!  ";
+    use_ok( 'Business::Edifact::Message::LineItem' ) || print "Bail out!";
 }
 
-my $obj = Edifact::Interchange->new;
-isa_ok( $obj, 'Edifact::Interchange');
+my $obj = Business::Edifact::Interchange->new;
+isa_ok( $obj, 'Business::Edifact::Interchange');
 can_ok( $obj, qw( messages ));
 
-diag( "Testing Edifact::Interchange $Edifact::Interchange::VERSION, Perl $], $^X" );
+diag( "Testing Business::Edifact::Interchange $Business::Edifact::Interchange::VERSION, Perl $], $^X" );

@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 sub not_in_file_ok {
     my ($filename, %regex) = @_;
@@ -48,8 +48,9 @@ TODO: {
     "placeholder date/time"       => qr(Date/time)
   );
 
-  module_boilerplate_ok('lib/Edifact/Interchange.pm');
-  module_boilerplate_ok('lib/Edifact/Message.pm');
+  module_boilerplate_ok('lib/Business/Edifact/Interchange.pm');
+  module_boilerplate_ok('lib/Business/Edifact/Message.pm');
+  module_boilerplate_ok('lib/Business/Edifact/Message/LineItem.pm');
 
 
 }

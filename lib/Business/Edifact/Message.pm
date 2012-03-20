@@ -1,14 +1,14 @@
-package Edifact::Message;
+package Business::Edifact::Message;
 
 use warnings;
 use strict;
 use 5.010;
 use Carp;
-use Edifact::Message::LineItem;
+use Business::Edifact::Message::LineItem;
 
 =head1 NAME
 
-Edifact::Message - Class that models Edifact Messages
+Business::Edifact::Message - Class that models Edifact Messages
 
 =head1 VERSION
 
@@ -21,7 +21,7 @@ our $VERSION = '0.01';
 =head1 SYNOPSIS
 
 Parses an individual Edifact message
-Message objects are instantiated by Edifact::Interchange and an array
+Message objects are instantiated by Business::Edifact::Interchange and an array
 of them is returned in its messages function
    $interchange->parse($incoming);
    my $m_array = $interchange->messages();
@@ -35,7 +35,7 @@ of them is returned in its messages function
 
 =head2 new
 
-Called by Edifact::Interchange to instantiate a new Message
+Called by Business::Edifact::Interchange to instantiate a new Message
 object. The caller passes the header fields with the 
 reference number identifier and message type
 
@@ -139,7 +139,7 @@ sub add_segment {
             if ( $data_arr->[3]->[0] ) {
                 $line->{sub_line_info} = $data_arr->[3];
             }
-            my $lineitem = Edifact::Message::LineItem->new($line);
+            my $lineitem = Business::Edifact::Message::LineItem->new($line);
 
             push @{ $self->{lines} }, $lineitem;
         }
@@ -285,7 +285,7 @@ Colin Campbell, C<< <colinsc@cpan.org> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-edifact-interchange at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Edifact-Interchange>.  I will be notified, and then you'll
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Business-Edifact-Interchange>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
 
@@ -295,7 +295,7 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Edifact::Message
+    perldoc Business::Edifact::Message
 
 
 =head1 ACKNOWLEDGEMENTS

@@ -1,4 +1,4 @@
-package Edifact::Message::LineItem;
+package Business::Edifact::Message::LineItem;
 
 use warnings;
 use strict;
@@ -7,7 +7,7 @@ use Carp;
 
 =head1 NAME
 
-Edifact::Message::LineItem - Model an individual Item Line in a message
+Business::Edifact::Message::LineItem - Model an individual Item Line in a message
 
 =head1 VERSION
 
@@ -26,7 +26,7 @@ This is an instance of one
 
 =head2 new
 
-Called by Edifact::Message to instantiate a new LineItem
+Called by Business::Edifact::Message to instantiate a new LineItem
 object. The caller passes the lineitem fields to
 the constructor
 
@@ -275,7 +275,7 @@ Colin Campbell, C<< <colinsc@cpan.org> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-edifact-interchange at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Edifact-Interchange>.  I will be notified, and then you'll
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Business-Edifact-Interchange>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
 
@@ -285,7 +285,7 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Edifact::Message
+    perldoc Business::Edifact::Message
 
 
 
@@ -305,4 +305,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-1;    # End of Edifact::Message::LineItem
+1;    # End of Business::Edifact::Message::LineItem

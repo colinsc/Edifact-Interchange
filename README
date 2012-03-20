@@ -1,4 +1,4 @@
-Edifact-Interchange
+Business-Edifact-Interchange
 
 Module to parse Library Supply Edifact Messages
 Following the EDItEUR Specifications
@@ -17,21 +17,21 @@ SUPPORT AND DOCUMENTATION
 After installing, you can find documentation for this module with the
 perldoc command.
 
-    perldoc Edifact::Interchange
+    perldoc Business::Edifact::Interchange
 
 You can also look for information at:
 
     RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Edifact-Interchange
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Business-Edifact-Interchange
 
     AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Edifact-Interchange
+        http://annocpan.org/dist/Business-Edifact-Interchange
 
     CPAN Ratings
-        http://cpanratings.perl.org/d/Edifact-Interchange
+        http://cpanratings.perl.org/d/Business-Edifact-Interchange
 
     Search CPAN
-        http://search.cpan.org/dist/Edifact-Interchange/
+        http://search.cpan.org/dist/Business-Edifact-Interchange/
 
     Github Repo
         git://github.com/colinsc/Edifact-Interchange.git

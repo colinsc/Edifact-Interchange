@@ -1,15 +1,15 @@
-package Edifact::Interchange;
+package Business::Edifact::Interchange;
 
 use warnings;
 use strict;
 use 5.010;
 use Carp;
 use Encode;
-use Edifact::Message;
+use Business::Edifact::Message;
 
 =head1 NAME
 
-Edifact::Interchange - Parse Edifact Messages For Book Ordering
+Business::Edifact::Interchange - Parse Edifact Messages For Book Ordering
 
 =head1 VERSION
 
@@ -35,9 +35,9 @@ my %encoding_map = (
 This is a support module for EDI ordering modules being developed for the
 Koha and Evergreen OS Library Management Systems
 
-    use Edifact::Interchange;
+    use Business::Edifact::Interchange;
 
-    my $foo = Edifact::Interchange->new();
+    my $foo = Business::Edifact::Interchange->new();
     $foo->parse($edifact_message);
     or
     $foo->parse_file($filename);
@@ -48,7 +48,7 @@ Koha and Evergreen OS Library Management Systems
 
 =head2 new
 
-Create an Edifact::Interchange object
+Create an Business::Edifact::Interchange object
 
 =cut
 
@@ -172,7 +172,7 @@ sub parse_file {
 =head2 user_data_segment
 
 internal method for handling message data segments
-pass to the current Edifact::Message object for fuller passing
+pass to the current Business::Edifact::Message object for fuller passing
 
 =cut
 
@@ -189,14 +189,14 @@ sub user_data_segment {
 
 =head2 message_header
 
-create a new Edifact::Message object
+create a new Business::Edifact::Message object
 
 =cut
 
 sub message_header {
     my ( $self, @data ) = @_;
 
-    my $msg = Edifact::Message->new( $self->split_components(@data) );
+    my $msg = Business::Edifact::Message->new( $self->split_components(@data) );
 
     return $msg;
 }
@@ -403,7 +403,7 @@ Colin Campbell, C<< <colinsc@cpan.org> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-edifact-interchange at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Edifact-Interchange>.  I will be notified, and then you'll
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Business-Edifact-Interchange>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
 
@@ -413,7 +413,7 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Edifact::Interchange
+    perldoc Business::Edifact::Interchange
 
 
 =head1 ACKNOWLEDGEMENTS
@@ -432,4 +432,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-1;    # End of Edifact::Interchange
+1;    # End of Business::Edifact::Interchange

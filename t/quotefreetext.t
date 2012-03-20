@@ -1,15 +1,15 @@
 use Test::More tests => 7;
 
-use Edifact::Interchange;
+use Business::Edifact::Interchange;
 use Data::Dumper;
 
-my $edi = Edifact::Interchange->new;
+my $edi = Business::Edifact::Interchange->new;
 
 $edi->parse_file('examples/prquotes_73050_20110826.ceq');
 
 my $messages = $edi->messages();
 
-isa_ok( $messages->[0], 'Edifact::Message' );
+isa_ok( $messages->[0], 'Business::Edifact::Message' );
 
 my $msg_cnt = @{$messages};
 
@@ -21,7 +21,7 @@ is( $messages->[0]->date_of_message(), '20110826', 'message date returned' );
 
 my $items = $messages->[0]->items();
 
-isa_ok( $items->[0], 'Edifact::Message::LineItem' );
+isa_ok( $items->[0], 'Business::Edifact::Message::LineItem' );
 
 cmp_ok(
     $items->[1]->{free_text}->{text},
