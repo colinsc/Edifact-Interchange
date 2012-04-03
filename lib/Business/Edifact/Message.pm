@@ -344,9 +344,9 @@ sub add_segment {
                 qualifier   => $data_arr->[0]->[0],    # LIN/LNO
                   reference => $data_arr->[2],
             };
-            if ($data_arr->[3])
-            {
-                $self->{lines}->[-1]->{free_text}->{text} = @{$data_arr->[3]};
+            if ( $data_arr->[3] ) {
+                $self->{lines}->[-1]->{free_text}->{text} = join q{ },
+                  @{ $data_arr->[3] };
             }
         }
     }
