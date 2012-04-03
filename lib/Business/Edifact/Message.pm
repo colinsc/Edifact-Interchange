@@ -82,13 +82,36 @@ sub add_segment {
                 }
                 elsif ( $qualifier == 36 ) {
                     $self->{expirty_date} = $date;
+                } elsif ( $qualifier == 131 ) {
+                    $self->{tax_point_date} = $date;
                 }
             }
             elsif ( $self->{segment_group} == 27 ) {
                 $self->{lines}->[-1]->addsegment( 'datetimeperiod', $data_arr );
+            } elsif ( $self->{segment_group} == 11 ) {
+                $self->{payment_terms}->{payment_date}=$date;
             }
         }
+        when ('PAT') {	# invoices only
+        	if ($data_arr->[0]->[0]==1)
+        	{
+        		$self->{payment_terms}	=	{
+        			type	=>	'basic',
+        			terms	=>	$data_arr->[2],
+        		};
+        	}
+        	elsif ($data_arr->[0]->[0]==3)
+        	{
+        		$self->{payment_terms}	=	{
+        			type	=>	'fixed_date',
+        		};
+        	}
+        }
         when ('RFF') {
+        	if ($data_arr->[0]->[0] eq 'VA')
+        	{
+        		$self->{supplier_vat_number}=$data_arr->[0]->[1];
+        	}
             if ( $self->{segment_group} == 0 ) {
                 $self->{segment_group}     = 1;    # 1 mandatory occurence
                 $self->{message_reference} = {
@@ -119,6 +142,10 @@ sub add_segment {
                 $self->{currency}      = $data_arr->[0];
                 $self->{segment_group} = 4;
             }
+            elsif ($self->{segment_group}==11)
+            {
+            	$self->{currency}	=	$data_arr->[0];
+            }
         }
         when ('NAD') {
             push @{ $self->{addresses} }, {
@@ -135,6 +162,7 @@ sub add_segment {
                 item_number_type       => $data_arr->[2]->[1],
                 additional_product_ids => [],
                 item_description       => [],
+                monetary_amount			=> [],
             };
             if ( $data_arr->[3]->[0] ) {
                 $line->{sub_line_info} = $data_arr->[3];
@@ -162,7 +190,15 @@ sub add_segment {
             }
         }
         when ('QTY') {
-            $self->{lines}->[-1]->{quantity} = $data_arr->[0]->[1];
+        	if (!$self->{item_locqty_flag})
+        	{
+            	$self->{lines}->[-1]->{quantity} = $data_arr->[0]->[1];
+            }
+            else
+            {
+            	$self->{lines}->[-1]->{place_of_delivery}->[-1]->{quantity} = $data_arr->[0]->[1];
+            	delete $self->{item_locqty_flag};
+            }
         }
         when ('GIR') {
             my $id = shift @{$data_arr};
@@ -174,7 +210,118 @@ sub add_segment {
             push @{ $self->{lines}->[-1]->{related_numbers} }, $relnum;
         }
         when ('MOA') {
-            $self->{lines}->[-1]->{monetary_amount} = $data_arr;
+            if ($self->{segment_group}==27)
+            {
+            	if (!$self->{item_alc_flag})
+            	{
+            		my $data = shift @{$data_arr};
+            		my $ma = { qualifier => $data->[0],
+            					value	=>	$data->[1],
+            				};
+
+	            	push @{ $self->{lines}->[-1]->{monetary_amount} }, $ma;
+				}
+				else
+				{
+					$self->{lines}->[-1]->{item_allowance_or_charge}->[-1]->{amount} = $data_arr->[0]->[1];
+				}
+			}
+			else
+			{
+				if (!$self->{item_alc_flag})
+            	{ 
+					my $data = shift @{$data_arr};
+            		my $ma = {
+            					qualifier => $data->[0],
+            					value	=>	$data->[1],
+							};
+					push @{ $self->{monetary_amount} }, $ma;
+				}
+				else
+				{
+					my $data = shift @{$data_arr};
+            		my $ma = {
+            					qualifier => $data->[0],
+            					value	=>	$data->[1],
+							};
+					push @{ $self->{allowance_or_charge}->[-1]->{amount} }, $ma;
+					delete $self->{item_alc_flag};
+				}
+			}
+		}
+        when ('TAX') {
+        	if ($self->{segment_group}==27)
+        	{
+        		if (!$self->{item_alc_flag})
+        		{
+        			my $tax = {
+        				type_code		=>	$data_arr->[1]->[0],
+        				rate			=>	$data_arr->[4]->[3],
+        				category_code	=>	$data_arr->[5]->[0],
+        			};
+        			push @{$self->{lines}->[-1]->{item_tax} }, $tax;
+        		}
+        		else
+        		{
+        			my $tax = {
+        				type_code		=>	$data_arr->[1]->[0],
+        				rate			=>	$data_arr->[4]->[3],
+        				category_code	=>	$data_arr->[5]->[0],
+        			};
+        			push @{$self->{lines}->[-1]->{item_allowance_or_charge}->[-1]->{tax} }, $tax;
+            		delete $self->{item_alc_flag};
+        		}
+        	}
+        	else
+        	{
+        		my $tax = {
+        				type_code		=>	$data_arr->[1]->[0],
+        				rate			=>	$data_arr->[4]->[3],
+        				category_code	=>	$data_arr->[5]->[0],
+        			};
+        			push @{$self->{tax} }, $tax;
+        	}
+        }
+        when ('ALC') {
+        	if ($self->{segment_group}==27)
+        	{
+        		my $alc = {
+        			type			=>	$data_arr->[0]->[0],
+        			sequence		=>	$data_arr->[3]->[0],
+        			service_code	=>	$data_arr->[4]->[0],
+        		};
+        		push @{$self->{lines}->[-1]->{item_allowance_or_charge} }, $alc;
+        		$self->{item_alc_flag} = 1;
+        	}
+        	else
+        	{
+        		my $alc = {
+        			type			=>	$data_arr->[0]->[0],
+        			sequence		=>	$data_arr->[3]->[0],
+        			service_code	=>	$data_arr->[4]->[0],
+        		};
+        		push @{$self->{allowance_or_charge} }, $alc;
+        		$self->{item_alc_flag} = 1;
+        	}
+        }
+        when ('RTE') {
+        	if ($self->{item_alc_flag}==1)
+        	{
+        		$self->{lines}->[-1]->{item_allowance_or_charge}->[-1]->{rate} = $data_arr->[0]->[1];
+            	delete $self->{item_alc_flag};
+        	}
+        }
+        when ('LOC')
+        {
+        	if ($self->{segment_group}==27 && $data_arr->[0]->[0]==7)
+        	{
+        		my $loc = {
+        			place	=>	$data_arr->[1]->[0],
+        			type_code	=>	$data_arr->[1]->[2],      			
+        		};
+        		push @{ $self->{lines}->[-1]->{place_of_delivery} }, $loc;
+        		$self->{item_locqty_flag} = 1;
+        	}
         }
         when ('PRI') {
             $self->{lines}->[-1]->{price} = {
@@ -196,9 +343,11 @@ sub add_segment {
             $self->{lines}->[-1]->{free_text} = {
                 qualifier   => $data_arr->[0]->[0],    # LIN/LNO
                   reference => $data_arr->[2],
-                  text      => join q{ },
-                  @{ $data_arr->[3] },
             };
+            if ($data_arr->[3])
+            {
+                $self->{lines}->[-1]->{free_text}->{text} = @{$data_arr->[3]};
+            }
         }
     }
     return;
