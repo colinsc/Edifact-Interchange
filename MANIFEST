@@ -6,12 +6,14 @@ examples/SampleQuote.txt
 examples/test2qty.ceq
 examples/prquotes_73050_20110826.ceq
 examples/quotes.edi
+examples/INVOIC_019371B.CEI
 lib/Business/Edifact/Interchange.pm
 lib/Business/Edifact/Message.pm
 lib/Business/Edifact/Message/LineItem.pm
 t/00-load.t
 t/boilerplate.t
 t/manifest.t
+t/parseinvoice.t
 t/parsequote.t
 t/parsequote2.t
 t/pod-coverage.t

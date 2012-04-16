@@ -142,6 +142,17 @@ sub function {
     }
 }
 
+=head2 message_code
+
+Returns 3 character message code from the BGM message
+
+=cut
+
+sub message_code {
+    my $self = shift;
+    return $self->{bgm_data}->[0]->[0];
+}
+
 =head2 currency_code
 
 =cut
@@ -367,13 +378,25 @@ sub handle_imd {
 
 sub handle_qty {
     my ( $self, $data_arr ) = @_;
-    if ( !$self->{item_locqty_flag} ) {
-        $self->{lines}->[-1]->{quantity} = $data_arr->[0]->[1];
+    if ( $self->type eq 'INVOIC' ) {
+        my $code = $data_arr->[0]->[0];
+        if ( $code == 47 ) {
+            $self->{lines}->[-1]->{quantity_invoiced} = $data_arr->[0]->[1];
+        }
+        elsif ( $code == 11 ) {
+            $self->{lines}->[-1]->{place_of_delivery}->[-1]
+              ->{split_delivery_quantity} = $data_arr->[0]->[1];
+        }
     }
     else {
-        $self->{lines}->[-1]->{place_of_delivery}->[-1]->{quantity} =
-          $data_arr->[0]->[1];
-        delete $self->{item_locqty_flag};
+        if ( !$self->{item_locqty_flag} ) {
+            $self->{lines}->[-1]->{quantity} = $data_arr->[0]->[1];
+        }
+        else {
+            $self->{lines}->[-1]->{place_of_delivery}->[-1]->{quantity} =
+              $data_arr->[0]->[1];
+            delete $self->{item_locqty_flag};
+        }
     }
     return;
 }
@@ -539,6 +562,8 @@ sub handle_loc {
 sub handle_pri {
     my ( $self, $data_arr ) = @_;
     $self->{lines}->[-1]->{price} = {
+
+        # qualifier: AAA = net AAB = gross AAE/F = info
         qualifier            => $data_arr->[0]->[0],
         price                => $data_arr->[0]->[1],
         price_type           => $data_arr->[0]->[2],
