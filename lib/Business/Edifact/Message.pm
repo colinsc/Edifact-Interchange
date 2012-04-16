@@ -131,6 +131,12 @@ sub function {
     elsif ( $f == 7 ) {
         return 'retransmission';
     }
+    elsif ( $f == 43 ) {
+        return 'additional transmission';
+    }
+    elsif ( $f == 46 ) {
+        return 'provisional';
+    }
     else {
         return $f;
     }
