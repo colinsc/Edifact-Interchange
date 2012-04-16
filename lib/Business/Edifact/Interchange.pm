@@ -13,11 +13,11 @@ Business::Edifact::Interchange - Parse Edifact Messages For Book Ordering
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 #  UNOA and UNOB "correspond to the basic ascii sets of iso 646 and iso 6937"
 # Version 4 of edifact should extend this to unicode
@@ -42,6 +42,10 @@ Koha and Evergreen OS Library Management Systems
     or
     $foo->parse_file($filename);
     ...
+
+The standards for using Edifact in Library Book Supply are available from
+
+    www.editeur.org
 
 
 =head1 SUBROUTINES/METHODS
@@ -414,10 +418,6 @@ automatically be notified of progress on your bug as I make changes.
 You can find documentation for this module with the perldoc command.
 
     perldoc Business::Edifact::Interchange
-
-The standards for using Edifact in Library Book Supply are available from
-
-    www.editeur.org
 
 
 =head1 ACKNOWLEDGEMENTS

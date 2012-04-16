@@ -5,3 +5,6 @@ Revision history for Business-Edifact-Interchange
 
 0.02    2012-03-18/15:00
         Placed under Business namespace
+
+0.03    2012-04-16/16:36
+        Include basic handling of Invoice Messages
