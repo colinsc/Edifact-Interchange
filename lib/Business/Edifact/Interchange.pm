@@ -415,6 +415,10 @@ You can find documentation for this module with the perldoc command.
 
     perldoc Business::Edifact::Interchange
 
+The standards for using Edifact in Library Book Supply are available from
+
+    www.editeur.org
+
 
 =head1 ACKNOWLEDGEMENTS
 
