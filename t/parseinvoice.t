@@ -1,4 +1,4 @@
-use Test::More tests => 12;
+use Test::More tests => 16;
 
 use Business::Edifact::Interchange;
 
@@ -43,3 +43,20 @@ cmp_ok( $invoicelines->[3]->{item_number},
 
 cmp_ok( $invoicelines->[3]->{quantity_invoiced},
     '==', 2, 'invoiced qty returned' );
+
+my $e = Business::Edifact::Interchange->new;
+
+$e->parse_file('examples/2_BLSINV224768.CEI');
+my $inv       = $e->messages();
+my $inv_lines = $inv->[0]->items();
+
+cmp_ok( $inv_lines->[1]->{price}->[0]->{qualifier},
+    'eq', 'AAA', 'price qualifier returned' );
+
+cmp_ok( $inv_lines->[1]->{price}->[1]->{qualifier},
+    'eq', 'AAB', 'second price qualifier returned' );
+
+cmp_ok( $inv_lines->[1]->{price}->[0]->{price}, '==', 7.55, 'price returned' );
+
+cmp_ok( $inv_lines->[1]->{price}->[1]->{price},
+    '==', 8.99, 'second price returned' );

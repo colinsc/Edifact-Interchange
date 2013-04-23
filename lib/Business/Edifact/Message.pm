@@ -12,11 +12,11 @@ Business::Edifact::Message - Class that models Edifact Messages
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 SYNOPSIS
 
@@ -561,7 +561,7 @@ sub handle_loc {
 
 sub handle_pri {
     my ( $self, $data_arr ) = @_;
-    $self->{lines}->[-1]->{price} = {
+    push @{ $self->{lines}->[-1]->{price} }, {
 
         # qualifier: AAA = net AAB = gross AAE/F = info
         qualifier            => $data_arr->[0]->[0],
