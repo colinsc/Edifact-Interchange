@@ -12,3 +12,7 @@ Revision history for Business-Edifact-Interchange
 0.04    2013-04-23/10:46
         Price needs to return an array of prices not
         a single price for invoices
+
+0.05    2013-12-16/11:45
+        Switch is now experimental
+        Avoid errors in newer perls by declaring its use
