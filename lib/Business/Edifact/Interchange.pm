@@ -3,6 +3,7 @@ package Business::Edifact::Interchange;
 use warnings;
 use strict;
 use 5.010;
+use feature 'switch';
 use Carp;
 use Encode;
 use Business::Edifact::Message;
