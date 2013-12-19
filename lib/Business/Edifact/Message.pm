@@ -51,6 +51,7 @@ sub new {
         reference          => [],
         addresses          => [],
         lines              => [],
+        free_text          => [],
         segment_group      => 0,
         type               => $hdr_fields->[1]->[0],
         segment_handler    => _init_sh(),
@@ -481,8 +482,9 @@ sub handle_tax {
                 rate          => $data_arr->[4]->[3],
                 category_code => $data_arr->[5]->[0],
             };
-            push @{ $self->{lines}->[-1]->{item_allowance_or_charge}->[-1]
-                  ->{tax} }, $tax;
+            push
+              @{ $self->{lines}->[-1]->{item_allowance_or_charge}->[-1]->{tax}
+              }, $tax;
             delete $self->{item_alc_flag};
         }
     }
@@ -600,13 +602,19 @@ sub handle_cnt {
 
 sub handle_ftx {
     my ( $self, $data_arr ) = @_;
-    $self->{lines}->[-1]->{free_text} = {
-        qualifier => $data_arr->[0]->[0],    # LIN/LNO
+    my $text_field = {
+        qualifier => $data_arr->[0]->[0],
+        function  => $data_arr->[1]->[0],
         reference => $data_arr->[2],
     };
     if ( $data_arr->[3] ) {
-        $self->{lines}->[-1]->{free_text}->{text} = join q{ },
-          @{ $data_arr->[3] };
+        $text_field->{text} = join q{ }, @{ $data_arr->[3] };
+    }
+    if ( @{ $self->{lines} } ) {    # at the lineitem level
+        $self->{lines}->[-1]->{free_text} = $text_field;
+    }
+    else {
+        push $self->{free_text}, $text_field;
     }
     return;
 }
