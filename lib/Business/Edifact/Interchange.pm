@@ -13,11 +13,11 @@ Business::Edifact::Interchange - Parse Edifact Messages For Book Ordering
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 #  UNOA and UNOB "correspond to the basic ascii sets of iso 646 and iso 6937"
 # Version 4 of edifact should extend this to unicode

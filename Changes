@@ -16,3 +16,8 @@ Revision history for Business-Edifact-Interchange
 0.05    2013-12-16/11:45
         Switch is now experimental
         Avoid errors in newer perls by declaring its use
+
+0.06    2013-12-19/13:15
+        As switch warnings now propagate abandon it
+        Support for free text fields at message level
+         
