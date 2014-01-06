@@ -231,7 +231,6 @@ sub interchange_trailer {
         carp "Message count error trailer says $data[0] I counted "
           . $self->{msg_cnt};
     }
-    say "Ref:$data[1]";
     if ( $data[1] ne $self->{control_ref} ) {
 
         carp 'Error mismatched control refs Header:'
