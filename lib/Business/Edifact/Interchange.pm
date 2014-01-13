@@ -89,7 +89,7 @@ sub parse {
         $self->read_service_string_advice($element);
     }
     my @segments =
-      split /(?<!$self->{separator}->{release})$self->{separator}->{segment}/,
+      split /(?<!$self->{separator}->{release})$self->{separator}->{segment} */,
       $doc;
     $self->{interchange} = [];
     $self->{messages}    = [];
