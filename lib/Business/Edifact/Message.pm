@@ -530,38 +530,25 @@ sub handle_moa {
 
 sub handle_tax {
     my ( $self, $data_arr ) = @_;
-    if ( $self->{segment_group} == 27 ) {
+
+    my $tax = {
+        function_code => $data_arr->[0]->[0],
+        type_code     => $data_arr->[1]->[0],
+        rate          => $data_arr->[4]->[3],
+        category_code => $data_arr->[5]->[0],
+    };
+    if ( $self->{segment_group} == 27 || $self->{segment_group} == 25 ) {
         if ( !$self->{item_alc_flag} ) {
-            my $tax = {
-                type_code     => $data_arr->[1]->[0],
-                rate          => $data_arr->[4]->[3],
-                category_code => $data_arr->[5]->[0],
-            };
-            push @{ $self->{lines}->[-1]->{item_tax} }, $tax;
+            push @{ $self->{lines}->[-1]->{tax} }, $tax;
         }
         else {
-            my $tax = {
-                type_code     => $data_arr->[1]->[0],
-                rate          => $data_arr->[4]->[3],
-                category_code => $data_arr->[5]->[0],
-            };
-            if ( $self->{item_alc_flag} ) {
-                push
-                  @{ $self->{lines}->[-1]->{item_allowance_or_charge}->[-1]
-                      ->{tax} }, $tax;
-                delete $self->{item_alc_flag};
-            }
-            else {
-                push @{ $self->{lines}->[-1]->{tax} }, $tax;
-            }
+            push
+              @{ $self->{lines}->[-1]->{item_allowance_or_charge}->[-1]->{tax}
+              }, $tax;
+            delete $self->{item_alc_flag};
         }
     }
     else {
-        my $tax = {
-            type_code     => $data_arr->[1]->[0],
-            rate          => $data_arr->[4]->[3],
-            category_code => $data_arr->[5]->[0],
-        };
         push @{ $self->{tax} }, $tax;
     }
     return;
