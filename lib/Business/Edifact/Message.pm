@@ -259,8 +259,21 @@ sub handle_pat {    # invoices only
 
 sub handle_rff {
     my ( $self, $data_arr ) = @_;
-    if ( $data_arr->[0]->[0] eq 'VA' ) {
+    my $ref_qualifier = $data_arr->[0]->[0];
+    if ( $ref_qualifier eq 'VA' ) {
         $self->{supplier_vat_number} = $data_arr->[0]->[1];
+    }
+    elsif ( $ref_qualifier eq 'API' ) {
+        $self->{additional_party_id} = $data_arr->[0]->[1];
+    }
+    elsif ( $ref_qualifier eq 'FC' ) {
+        $self->{fiscal_number} = $data_arr->[0]->[1];
+    }
+    elsif ( $ref_qualifier eq 'IA' ) {
+        $self->{internal_vendor_number} = $data_arr->[0]->[1];
+    }
+    elsif ( $ref_qualifier eq 'TL' ) {
+        $self->{tax_exemption_licence} = $data_arr->[0]->[1];
     }
     if ( $self->{segment_group} == 0 ) {
         $self->{segment_group}     = 1;    # 1 mandatory occurence
