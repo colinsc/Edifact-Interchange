@@ -614,7 +614,7 @@ sub handle_ftx {
         $self->{lines}->[-1]->{free_text} = $text_field;
     }
     else {
-        push $self->{free_text}, $text_field;
+        push @{$self->{free_text}}, $text_field;
     }
     return;
 }
