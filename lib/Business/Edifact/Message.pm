@@ -298,6 +298,17 @@ sub handle_rff {
     elsif ( $self->{segment_group} == 27 ) {    # ref to an address (SG12)
         $self->{lines}->[-1]->addsegment( 'item_reference', $data_arr );
     }
+    elsif ( $self->{segment_group} == 25 ) {    # Buyer's orderline number
+        if ( $ref_qualifier eq 'LI' ) {
+            $self->{lines}->[-1]->{buyers_refnumber} = $data_arr->[0]->[1];
+            if ( $data_arr->[0]->[2] ) {
+                $self->{lines}->[-1]->{buyers_ref_lineno} = $data_arr->[0]->[2];
+            }
+        }
+        else {
+            $self->{lines}->[-1]->addsegment( 'item_reference', $data_arr );
+        }
+    }
     else {
         push @{ $self->{reference} },
           {

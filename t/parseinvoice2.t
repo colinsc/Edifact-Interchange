@@ -1,4 +1,4 @@
-use Test::More tests => 21;
+use Test::More tests => 22;
 
 use Business::Edifact::Interchange;
 
@@ -65,8 +65,11 @@ cmp_ok( $invoicelines->[1]->{price}->[0]->{price},
 
 my $tax = $invoicelines->[1]->{tax}->[0];
 
-cmp_ok( $tax->{function_code}, '==', 7, 'tax functon TAX returned');
+cmp_ok( $tax->{function_code}, '==', 7, 'tax functon TAX returned' );
 
-cmp_ok( $tax->{type_code}, 'eq', 'VAT', 'tax type retrieved as VAT');
+cmp_ok( $tax->{type_code}, 'eq', 'VAT', 'tax type retrieved as VAT' );
 
-cmp_ok( $tax->{category_code}, 'eq', 'Z', 'tax retrieved as zero rated');
+cmp_ok( $tax->{category_code}, 'eq', 'Z', 'tax retrieved as zero rated' );
+
+cmp_ok( $invoicelines->[1]->{buyers_refnumber},
+    'eq', 'BY99375', "invoice line buyer's ref number returned" );
