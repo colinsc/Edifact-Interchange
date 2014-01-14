@@ -13,11 +13,11 @@ Business::Edifact::Interchange - Parse Edifact Messages For Book Ordering
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 #  UNOA and UNOB "correspond to the basic ascii sets of iso 646 and iso 6937"
 # Version 4 of edifact should extend this to unicode
@@ -422,7 +422,7 @@ You can find documentation for this module with the perldoc command.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2011,2012 Colin Campbell. <colin.campbell@ptfs-europe.com>
+Copyright 2011-2014 Colin Campbell. <colin.campbell@ptfs-europe.com>
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published

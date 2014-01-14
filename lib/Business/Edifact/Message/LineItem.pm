@@ -11,11 +11,11 @@ Business::Edifact::Message::LineItem - Model an individual Item Line in a messag
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 =head1 SYNOPSIS
 
@@ -294,7 +294,7 @@ You can find documentation for this module with the perldoc command.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2011,2012 Colin Campbell.
+Copyright 2011-2014 Colin Campbell.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published

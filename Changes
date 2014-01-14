@@ -21,3 +21,6 @@ Revision history for Business-Edifact-Interchange
         As switch warnings now propagate abandon it
         Support for free text fields at message level
          
+0.07    2014-01-14/17:58
+        Rework handling of invoice messages esp. invoicelines
+        Add a number of tests of invoice handling
