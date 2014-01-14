@@ -1,4 +1,4 @@
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use Business::Edifact::Interchange;
 
@@ -39,8 +39,8 @@ cmp_ok( $messages->[0]->{payment_terms}->{terms}->[2],
 cmp_ok( $messages->[0]->{payment_terms}->{terms}->[3],
     '==', '30', 'payment terms are 30 days' );
 
-my $moa_values = @{$messages->[0]->{monetary_amount}};
-cmp_ok( $moa_values, '==', 7, 'message level monetary values returned');
+my $moa_values = @{ $messages->[0]->{monetary_amount} };
+cmp_ok( $moa_values, '==', 7, 'message level monetary values returned' );
 
 my $invoicelines = $messages->[0]->items();
 
@@ -54,4 +54,6 @@ cmp_ok( $invoicelines->[1]->{item_ID_number}->{type},
 cmp_ok( $invoicelines->[1]->{quantity_invoiced},
     '==', 3, 'invoiced qty returned' );
 
+cmp_ok( $invoicelines->[1]->{lineitem_amount},
+    '==', 10.77, 'lineitem amount returned' );
 

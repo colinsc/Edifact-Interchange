@@ -473,7 +473,26 @@ sub handle_gir {
 sub handle_moa {
     my ( $self, $data_arr ) = @_;
     if ( $self->{segment_group} == 27 || $self->{segment_group} == 25 ) {
-        if ( !$self->{item_alc_flag} ) {
+        if ( $data_arr->[0]->[0] == 203 ) {
+            $self->{lines}->[-1]->{lineitem_amount} = $data_arr->[0]->[1];
+        }
+        elsif ( $data_arr->[0]->[0] == 128 ) {
+            $self->{lines}->[-1]->{lineitem_total_amount} =
+              $data_arr->[0]->[1];
+        }
+        elsif ( $data_arr->[0]->[0] == 52 ) {
+            $self->{lines}->[-1]->{lineitem_discount_amount} =
+              $data_arr->[0]->[1];
+        }
+        elsif ( $data_arr->[0]->[0] == 146 ) {
+            $self->{lines}->[-1]->{lineitem_unit_price} =
+              $data_arr->[0]->[1];
+        }
+        elsif ( $self->{item_alc_flag} ) {
+            $self->{lines}->[-1]->{item_allowance_or_charge}->[-1]->{amount} =
+              $data_arr->[0]->[1];
+        }
+        else {
             my $data = shift @{$data_arr};
             my $ma   = {
                 qualifier => $data->[0],
@@ -481,27 +500,6 @@ sub handle_moa {
             };
 
             push @{ $self->{lines}->[-1]->{monetary_amount} }, $ma;
-        }
-        else {
-            if ( $data_arr->[0]->[0] == 203 ) {
-                $self->{lines}->[-1]->{lineitem_amount} = $data_arr->[0]->[1];
-            }
-            elsif ( $data_arr->[0]->[0] == 128 ) {
-                $self->{lines}->[-1]->{lineitem_total_amount} =
-                  $data_arr->[0]->[1];
-            }
-            elsif ( $data_arr->[0]->[0] == 52 ) {
-                $self->{lines}->[-1]->{lineitem_discount_amount} =
-                  $data_arr->[0]->[1];
-            }
-            elsif ( $data_arr->[0]->[0] == 146 ) {
-                $self->{lines}->[-1]->{lineitem_unit_price} =
-                  $data_arr->[0]->[1];
-            }
-            else {
-                $self->{lines}->[-1]->{item_allowance_or_charge}->[-1]->{amount}
-                  = $data_arr->[0]->[1];
-            }
         }
     }
     else {
