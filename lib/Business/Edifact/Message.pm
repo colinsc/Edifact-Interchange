@@ -83,6 +83,7 @@ sub _init_sh {
         UNS => \&handle_uns,
         CNT => \&handle_cnt,
         FTX => \&handle_ftx,
+        PCD => \&handle_pcd,
     };
 }
 
@@ -686,6 +687,21 @@ sub handle_ftx {
         push @{ $self->{free_text} }, $text_field;
     }
     return;
+}
+
+=head2 handle_pcd
+
+=cut
+
+sub handle_pcd {
+    my ( $self, $data_arr ) = @_;
+    if ( $self->{item_alc_flag} ) {
+        $self->{lines}->[-1]->{item_allowance_or_charge}->[-1]->{percentage} =
+          $data_arr->[0]->[1];
+        delete $self->{item_alc_flag};
+    }
+    return;
+
 }
 
 =head2 clear_item_flags

@@ -1,4 +1,4 @@
-use Test::More tests => 22;
+use Test::More tests => 24;
 
 use Business::Edifact::Interchange;
 
@@ -62,6 +62,12 @@ cmp_ok( $invoicelines->[1]->{price}->[0]->{qualifier},
 
 cmp_ok( $invoicelines->[1]->{price}->[0]->{price},
     '==', 3.99, 'correct value for information price returned' );
+
+cmp_ok( $invoicelines->[1]->{item_allowance_or_charge}->[0]->{service_code},
+    'eq', 'DI', 'discount applicable returned' );
+
+cmp_ok( $invoicelines->[1]->{item_allowance_or_charge}->[0]->{percentage},
+    '==', 10, 'discount at 10 per cent returned' );
 
 my $tax = $invoicelines->[1]->{tax}->[0];
 
